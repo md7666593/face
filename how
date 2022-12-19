@@ -1,0 +1,10 @@
+BlurFaces[img_] :=
+ Module[{faces, mask, blur},
+  faces = FindFaces[img];
+  mask = Graphics[Disk[Mean[##], First@Differences[##]/2] & /@ faces, 
+    PlotRange -> Transpose[{{0, 0}, ImageDimensions[img]}], 
+    ImageSize -> 1 -> 1];
+  blur = Max[Abs[#2 - #1] & @@@ faces]/5;
+  ImageCompose[img, 
+   SetAlphaChannel[Blur[img, blur], ColorNegate@Blur[mask, blur]]]
+  ]
